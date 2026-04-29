@@ -1,0 +1,1365 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Priss Fernandes · Curadoria de Semijoias</title>
+  <!-- Ícone da aba / favicon -->
+  <link rel="icon" type="image/png" sizes="512x512" href="./img/favicon.png?v=5">
+  <link rel="shortcut icon" href="./img/favicon.ico?v=5">
+  <link rel="apple-touch-icon" sizes="180x180" href="./img/apple-touch-icon.png?v=5">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Outfit:wght@200;300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+
+  <style>
+    /* ─── RESET & TOKENS ─── */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --cream:      #F6F1E9;
+      --warm-white: #FAF7F2;
+      --beige:      #EDE3D0;
+      --sand:       #D5C4A6;
+      --gold:       #C9A96E;
+      --gold-light: #E2C98A;
+      --terra:      #A07850;
+      --brown:      #6B4C30;
+      --dark:       #1E1612;
+      --ink:        #2C2016;
+      --mid:        #7A6245;
+      --muted:      #A08B72;
+
+      --serif: 'Cormorant Garamond', Georgia, serif;
+      --sans:  'Outfit', system-ui, sans-serif;
+
+      --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--warm-white);
+      color: var(--ink);
+      font-family: var(--sans);
+      font-weight: 300;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    a, button, [role="button"], input, label, select, textarea {
+      cursor: none;
+    }
+
+    /* ─── CUSTOM CURSOR ─── */
+    #cursor {
+      width: 10px; height: 10px;
+      background: var(--gold);
+      border-radius: 50%;
+      position: fixed; top: 0; left: 0;
+      pointer-events: none; z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: transform 0.08s, width 0.3s var(--ease-out), height 0.3s var(--ease-out), background 0.3s;
+    }
+    #cursor-ring {
+      width: 36px; height: 36px;
+      border: 1px solid rgba(201,169,110,0.5);
+      border-radius: 50%;
+      position: fixed; top: 0; left: 0;
+      pointer-events: none; z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: transform 0.18s var(--ease-out), width 0.3s var(--ease-out), height 0.3s var(--ease-out);
+    }
+    body:has(a:hover) #cursor,
+    body:has(button:hover) #cursor { width: 6px; height: 6px; background: var(--gold-light); }
+    body:has(a:hover) #cursor-ring,
+    body:has(button:hover) #cursor-ring { width: 52px; height: 52px; }
+
+    /* ─── SCROLLBAR ─── */
+    ::-webkit-scrollbar { width: 3px; }
+    ::-webkit-scrollbar-track { background: var(--beige); }
+    ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 2px; }
+
+    /* ─── NOISE OVERLAY ─── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none; opacity: 0.4;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed; top: 0; left: 0; width: 100%; z-index: 500;
+      display: flex; justify-content: center; align-items: center;
+      padding: 1.6rem 4vw;
+      transition: background 0.6s var(--ease-out), padding 0.4s var(--ease-out),
+                  border-bottom 0.4s;
+    }
+    nav.scrolled {
+      background: rgba(246,241,233,0.88);
+      backdrop-filter: blur(16px) saturate(1.5);
+      -webkit-backdrop-filter: blur(16px) saturate(1.5);
+      border-bottom: 0.5px solid rgba(201,169,110,0.25);
+      padding: 1.1rem 4vw;
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 0.9rem;
+      text-decoration: none;
+    }
+    .nav-logo-mark {
+      width: 34px; height: 34px;
+      border: 1px solid var(--gold);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--serif); font-size: 1rem; font-weight: 400;
+      color: var(--gold);
+      transition: background 0.3s, color 0.3s;
+    }
+    .nav-logo:hover .nav-logo-mark { background: var(--gold); color: var(--cream); }
+    .nav-logo-text {
+      font-family: var(--serif);
+      font-size: 1.05rem; font-weight: 400;
+      letter-spacing: 0.12em;
+      color: var(--ink);
+    }
+    .nav-links {
+      display: flex; gap: 2.8rem; list-style: none;
+    }
+    .nav-links a {
+      font-size: 0.68rem; letter-spacing: 0.28em;
+      text-transform: uppercase; color: var(--mid);
+      text-decoration: none; position: relative;
+      transition: color 0.3s;
+    }
+    .nav-links a::after {
+      content: ''; position: absolute; bottom: -3px; left: 0;
+      width: 0; height: 0.5px; background: var(--gold);
+      transition: width 0.35s var(--ease-out);
+    }
+    .nav-links a:hover { color: var(--gold); }
+    .nav-links a:hover::after { width: 100%; }
+    .nav-ig {
+      display: flex; align-items: center; gap: 0.5rem;
+      font-size: 0.68rem; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--mid);
+      text-decoration: none; transition: color 0.3s;
+    }
+    .nav-ig:hover { color: var(--gold); }
+    .nav-ig i { font-size: 1.1rem; }
+    .nav-ig-center {
+      margin: 0 auto;
+      justify-content: center;
+    }
+
+    /* ─── HERO ─── */
+    .hero {
+      min-height: 100vh;
+      display: grid; grid-template-columns: 1fr 1fr;
+      position: relative; overflow: hidden;
+    }
+    .hero-left {
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 12vh 5vw 10vh;
+      position: relative; z-index: 2;
+    }
+    .hero-eyebrow {
+      display: flex; align-items: center; gap: 1rem;
+      margin-bottom: 2.5rem;
+      opacity: 0; transform: translateY(20px);
+      animation: fadeUp 1s var(--ease-out) 0.3s forwards;
+    }
+    .hero-eyebrow-line {
+      width: 40px; height: 0.5px; background: var(--gold);
+    }
+    .hero-eyebrow span {
+      font-size: 0.6rem; letter-spacing: 0.35em;
+      text-transform: uppercase; color: var(--gold);
+    }
+    .hero-title {
+      font-family: var(--serif);
+      font-size: clamp(3.5rem, 6vw, 7rem);
+      font-weight: 300; line-height: 1.02;
+      color: var(--ink); margin-bottom: 2rem;
+      opacity: 0; transform: translateY(30px);
+      animation: fadeUp 1.2s var(--ease-out) 0.5s forwards;
+    }
+    .hero-title em {
+      font-style: italic; color: var(--gold);
+    }
+    .hero-subtitle {
+      font-size: 0.85rem; line-height: 1.9;
+      color: var(--muted); max-width: 340px;
+      margin-bottom: 3.5rem;
+      opacity: 0; transform: translateY(20px);
+      animation: fadeUp 1s var(--ease-out) 0.8s forwards;
+    }
+    .hero-actions {
+      display: flex; align-items: center; gap: 2.5rem;
+      opacity: 0; transform: translateY(20px);
+      animation: fadeUp 1s var(--ease-out) 1s forwards;
+    }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 0.8rem;
+      background: var(--gold); color: var(--dark);
+      font-size: 0.65rem; letter-spacing: 0.3em;
+      text-transform: uppercase; font-weight: 500;
+      padding: 1.1rem 2.5rem; text-decoration: none;
+      transition: background 0.3s, transform 0.3s var(--ease-out);
+      clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+    }
+    .btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); }
+    .btn-ghost {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      font-size: 0.65rem; letter-spacing: 0.28em;
+      text-transform: uppercase; color: var(--mid);
+      text-decoration: none;
+      border-bottom: 0.5px solid rgba(160,136,98,0.4);
+      padding-bottom: 0.3rem;
+      transition: color 0.3s, border-color 0.3s;
+    }
+    .btn-ghost:hover { color: var(--gold); border-color: var(--gold); }
+
+    .hero-right {
+      position: relative; overflow: hidden;
+    }
+    .hero-image-wrap {
+      position: absolute; inset: 0;
+      opacity: 0; animation: heroImgIn 1.4s var(--ease-out) 0.2s forwards;
+    }
+    .hero-image-wrap img {
+      width: 100%; height: 100%; object-fit: cover;
+      transform: scale(1.05);
+      animation: heroImgZoom 12s var(--ease-out) 0.2s forwards;
+    }
+    .hero-image-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to right, var(--warm-white) 0%, transparent 20%),
+                  linear-gradient(to top, var(--warm-white) 0%, transparent 25%);
+    }
+    .hero-counter {
+      position: absolute; bottom: 3rem; right: 3rem;
+      font-family: var(--serif); font-size: 5.5rem; font-weight: 300;
+      color: rgba(30,22,18,0.06); line-height: 1; user-select: none;
+      animation: fadeIn 2s ease 1.5s both;
+    }
+    .hero-scroll-hint {
+      position: absolute; bottom: 2.5rem; left: 5vw;
+      display: flex; align-items: center; gap: 1rem;
+      opacity: 0; animation: fadeUp 1s ease 2s forwards;
+    }
+    .scroll-line {
+      width: 1px; height: 50px; background: var(--gold);
+      transform-origin: top;
+      animation: scrollLine 2s ease 2.2s infinite alternate;
+    }
+    .scroll-text {
+      font-size: 0.58rem; letter-spacing: 0.3em;
+      text-transform: uppercase; color: var(--muted);
+      writing-mode: vertical-rl;
+    }
+
+    @keyframes scrollLine { from { transform: scaleY(0.3); } to { transform: scaleY(1.2); } }
+    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeIn { to { opacity: 1; } }
+    @keyframes heroImgIn { to { opacity: 1; } }
+    @keyframes heroImgZoom { to { transform: scale(1); } }
+
+    /* ─── MARQUEE ─── */
+    .marquee-strip {
+      background: var(--gold);
+      overflow: hidden;
+      padding: 1rem 0;
+      position: relative;
+      z-index: 2;
+    }
+
+    .marquee-track {
+      display: flex;
+      width: max-content;
+      will-change: transform;
+      animation: marqueeScroll var(--marquee-duration, 28s) linear infinite;
+    }
+
+    .marquee-group {
+      display: flex;
+      align-items: center;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .marquee-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 1.2rem;
+      font-size: 0.62rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--dark);
+      font-weight: 500;
+      flex-shrink: 0;
+      padding: 0 2rem;
+    }
+
+    .marquee-dot {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--dark);
+      opacity: 0.5;
+      flex-shrink: 0;
+    }
+
+    @keyframes marqueeScroll {
+      from { transform: translateX(0); }
+      to   { transform: translateX(calc(-1 * var(--marquee-width, 50%))); }
+    }
+
+    /* ─── SEÇÃO SOBRE ─── */
+    .sobre {
+      display: grid; grid-template-columns: 1fr 1fr;
+      min-height: 85vh; overflow: hidden;
+    }
+    .sobre-image {
+      position: relative; overflow: hidden;
+    }
+    .sobre-image img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform 1.2s var(--ease-out);
+    }
+    .sobre-image:hover img { transform: scale(1.04); }
+    .sobre-image-badge {
+      position: absolute; bottom: 2.5rem; right: -1px;
+      background: var(--dark); color: var(--gold);
+      padding: 1.2rem 2rem;
+      font-size: 0.6rem; letter-spacing: 0.3em;
+      text-transform: uppercase; font-weight: 500;
+    }
+    .sobre-content {
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 8vh 6vw;
+    }
+    .section-label {
+      display: flex; align-items: center; gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .section-label-line { width: 28px; height: 0.5px; background: var(--gold); }
+    .section-label span {
+      font-size: 0.58rem; letter-spacing: 0.35em;
+      text-transform: uppercase; color: var(--gold);
+    }
+    .section-title {
+      font-family: var(--serif);
+      font-size: clamp(2.4rem, 4vw, 4rem);
+      font-weight: 300; line-height: 1.1;
+      color: var(--ink); margin-bottom: 2rem;
+    }
+    .section-title em { font-style: italic; color: var(--terra); }
+    .section-body {
+      font-size: 0.9rem; line-height: 1.95;
+      color: var(--muted); margin-bottom: 2.5rem;
+      max-width: 420px;
+    }
+    .sobre-stats {
+      display: flex; gap: 3rem; margin-top: 1rem;
+    }
+    .stat-item { display: flex; flex-direction: column; gap: 0.3rem; }
+    .stat-num {
+      font-family: var(--serif); font-size: 2.5rem;
+      font-weight: 300; color: var(--gold); line-height: 1;
+    }
+    .stat-label {
+      font-size: 0.62rem; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--muted);
+    }
+
+    /* ─── GRID CURADORIA ─── */
+    .curadoria {
+      padding: 10vh 5vw 4vh;
+      background: var(--warm-white);
+    }
+    .curadoria-header {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      margin-bottom: 5rem;
+    }
+    .curadoria-header-left { max-width: 480px; }
+    .curadoria-header-right {
+      font-size: 0.65rem; letter-spacing: 0.25em;
+      text-transform: uppercase; color: var(--muted);
+      text-align: right; line-height: 1.8;
+    }
+
+    /* Bento-style grid */
+    .bento-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      grid-template-rows: auto;
+      gap: 1.2rem;
+    }
+    .bento-item {
+      position: relative; overflow: hidden;
+      background: var(--beige);
+    }
+    .bento-item a {
+      display: block;
+      width: 100%; height: 100%;
+    }
+    .bento-item:nth-child(1) { grid-column: 1 / 6; grid-row: 1 / 3; }
+    .bento-item:nth-child(2) { grid-column: 6 / 9; grid-row: 1 / 2; }
+    .bento-item:nth-child(3) { grid-column: 9 / 13; grid-row: 1 / 3; }
+    .bento-item:nth-child(4) { grid-column: 6 / 9; grid-row: 2 / 3; }
+    .bento-item:nth-child(5) { grid-column: 1 / 5; grid-row: 3 / 4; }
+    .bento-item:nth-child(6) { grid-column: 5 / 13; grid-row: 3 / 4; }
+
+    .bento-item img {
+      width: 100%; height: 100%; object-fit: cover;
+      min-height: 280px;
+      transition: transform 0.9s var(--ease-out);
+    }
+    .bento-item:hover img { transform: scale(1.06); }
+    .bento-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(30,22,18,0.75) 0%, transparent 55%);
+      opacity: 0;
+      transition: opacity 0.5s var(--ease-out);
+    }
+    .bento-item:hover .bento-overlay { opacity: 1; }
+    .bento-info {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 2rem 1.8rem;
+      transform: translateY(8px);
+      transition: transform 0.5s var(--ease-out);
+    }
+    .bento-item:hover .bento-info { transform: translateY(0); }
+    .bento-tag {
+      font-size: 0.55rem; letter-spacing: 0.3em;
+      text-transform: uppercase; color: var(--gold-light);
+      margin-bottom: 0.5rem; display: block;
+    }
+    .bento-name {
+      font-family: var(--serif); font-size: 1.4rem;
+      font-weight: 300; color: #fff; font-style: italic;
+    }
+
+    /* ─── FILOSOFIA ─── */
+    .filosofia {
+      background: var(--dark);
+      padding: 6vh 5vw;
+      position: relative; overflow: hidden;
+    }
+    .filosofia::before {
+      content: '';
+      position: absolute; top: -30%; right: -10%;
+      width: 55vw; height: 55vw;
+      border-radius: 50%;
+      border: 1px solid rgba(201,169,110,0.08);
+      pointer-events: none;
+    }
+    .filosofia::after {
+      content: '';
+      position: absolute; bottom: -20%; left: -5%;
+      width: 35vw; height: 35vw;
+      border-radius: 50%;
+      border: 1px solid rgba(201,169,110,0.05);
+      pointer-events: none;
+    }
+    .filosofia-inner {
+      max-width: 900px; margin: 0 auto;
+      text-align: center; position: relative; z-index: 1;
+    }
+    .filosofia-quote {
+      font-family: var(--serif);
+      font-size: clamp(2.2rem, 4.5vw, 4.5rem);
+      font-weight: 300; font-style: italic;
+      color: var(--cream); line-height: 1.25;
+      margin-bottom: 3rem;
+    }
+    .filosofia-quote em { color: var(--gold); font-style: normal; }
+    .filosofia-attr {
+      font-size: 0.62rem; letter-spacing: 0.4em;
+      text-transform: uppercase; color: var(--muted);
+    }
+    .filosofia-divider {
+      width: 40px; height: 1px; background: var(--gold);
+      margin: 1.5rem auto;
+    }
+
+
+    /* ─── DEPOIMENTOS ─── */
+    .depoimentos {
+      padding: 11vh 5vw; background: var(--cream);
+    }
+    .depo-header { text-align: center; margin-bottom: 5rem; }
+    .depo-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;
+    }
+    .depo-card {
+      padding: 2.5rem; background: var(--warm-white);
+      border: 0.5px solid rgba(201,169,110,0.2);
+      position: relative;
+      transition: transform 0.4s var(--ease-out), box-shadow 0.4s;
+    }
+    .depo-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 24px 48px rgba(107,76,48,0.08);
+    }
+    .depo-stars {
+      display: flex; gap: 0.3rem; margin-bottom: 1.5rem;
+    }
+    .depo-stars i { color: var(--gold); font-size: 0.7rem; }
+    .depo-text {
+      font-family: var(--serif); font-size: 1.1rem;
+      font-style: italic; font-weight: 300;
+      color: var(--ink); line-height: 1.7;
+      margin-bottom: 1.8rem;
+    }
+    .depo-author {
+      display: flex; align-items: center; gap: 1rem;
+    }
+    .depo-avatar {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--beige); border: 1px solid var(--sand);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--serif); font-size: 0.9rem;
+      color: var(--terra); font-style: italic;
+    }
+    .depo-name {
+      font-size: 0.75rem; font-weight: 500; color: var(--ink);
+      letter-spacing: 0.05em;
+    }
+    .depo-handle {
+      font-size: 0.65rem; color: var(--muted); letter-spacing: 0.05em;
+    }
+
+    /* ─── CONTATO / PROMO BURITIS ─── */
+    .promo-buritis {
+      min-height: 78vh;
+      display: grid;
+      grid-template-columns: 1.08fr 0.92fr;
+      overflow: hidden;
+      background: var(--warm-white);
+    }
+    .promo-left {
+      background:
+        radial-gradient(circle at top left, rgba(201,169,110,0.06), transparent 35%),
+        linear-gradient(180deg, #1b0f0b 0%, #24140e 100%);
+      color: #f5efe7;
+      display: flex;
+      align-items: center;
+      padding: 7vw 6vw;
+      position: relative;
+      overflow: hidden;
+    }
+    .promo-left::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent 72%, rgba(0,0,0,0.08) 100%);
+      pointer-events: none;
+    }
+    .promo-content {
+      max-width: 620px;
+      position: relative;
+      z-index: 2;
+    }
+    .promo-label {
+      font-size: 0.95rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      font-weight: 500;
+      color: var(--gold);
+      margin-bottom: 1.2rem;
+    }
+    .promo-line {
+      width: 78px;
+      height: 2px;
+      background: var(--gold);
+      margin-bottom: 2.2rem;
+      opacity: 0.95;
+    }
+    .promo-title {
+      font-family: var(--serif);
+      font-size: clamp(3.4rem, 6vw, 6.2rem);
+      line-height: 0.95;
+      font-weight: 400;
+      letter-spacing: -0.03em;
+      color: #f7f1ea;
+      margin-bottom: 2rem;
+    }
+    .promo-title em {
+      font-style: italic;
+      font-weight: 500;
+      color: var(--gold);
+    }
+    .promo-desc {
+      max-width: 440px;
+      font-size: 1.05rem;
+      line-height: 1.8;
+      color: rgba(245,239,231,0.88);
+      margin-bottom: 3rem;
+    }
+    .promo-cta-row {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .promo-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.9rem;
+      color: var(--gold-light);
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      font-size: 0.82rem;
+      font-weight: 500;
+      border-bottom: 1.5px solid var(--gold);
+      padding-bottom: 0.7rem;
+      transition: 0.35s var(--ease-out);
+    }
+    .promo-cta:hover {
+      color: #ead0a1;
+      border-color: #ead0a1;
+      transform: translateX(4px);
+    }
+    .promo-right {
+      position: relative;
+      min-height: 100%;
+      background: var(--beige);
+      overflow: hidden;
+    }
+    .promo-right img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--ink); padding: 3rem 5vw;
+      display: flex; justify-content: space-between; align-items: center;
+      border-top: 0.5px solid rgba(201,169,110,0.1);
+    }
+    .footer-logo {
+      font-family: var(--serif); font-size: 0.95rem;
+      color: rgba(246,241,233,0.4); letter-spacing: 0.12em;
+    }
+    .footer-copy {
+      font-size: 0.62rem; letter-spacing: 0.2em;
+      color: rgba(246,241,233,0.3); text-transform: uppercase;
+    }
+    .footer-ig {
+      color: rgba(246,241,233,0.4); text-decoration: none;
+      font-size: 1.1rem; transition: color 0.3s;
+    }
+    .footer-ig:hover { color: var(--gold); }
+
+    /* ─── REVEAL ANIMATIONS ─── */
+    .reveal {
+      opacity: 0; transform: translateY(40px);
+      transition: opacity 0.9s var(--ease-out), transform 0.9s var(--ease-out);
+    }
+    .reveal.revealed { opacity: 1; transform: translateY(0); }
+
+    .reveal-left {
+      opacity: 0; transform: translateX(-40px);
+      transition: opacity 0.9s var(--ease-out), transform 0.9s var(--ease-out);
+    }
+    .reveal-left.revealed { opacity: 1; transform: translateX(0); }
+
+    .reveal-right {
+      opacity: 0; transform: translateX(40px);
+      transition: opacity 0.9s var(--ease-out), transform 0.9s var(--ease-out);
+    }
+    .reveal-right.revealed { opacity: 1; transform: translateX(0); }
+
+    .reveal-scale {
+      opacity: 0; transform: scale(0.94);
+      transition: opacity 0.9s var(--ease-out), transform 0.9s var(--ease-out);
+    }
+    .reveal-scale.revealed { opacity: 1; transform: scale(1); }
+
+    [data-delay="1"] { transition-delay: 0.1s !important; }
+    [data-delay="2"] { transition-delay: 0.2s !important; }
+    [data-delay="3"] { transition-delay: 0.3s !important; }
+    [data-delay="4"] { transition-delay: 0.4s !important; }
+    [data-delay="5"] { transition-delay: 0.5s !important; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 900px) {
+      .hero, .sobre, .promo-buritis { grid-template-columns: 1fr; }
+      .hero-right, .sobre-image, .promo-right { height: 55vw; min-height: 300px; }
+      .bento-item:nth-child(1) { grid-column: 1 / 7; }
+      .bento-item:nth-child(2) { grid-column: 7 / 13; }
+      .bento-item:nth-child(3) { grid-column: 1 / 7; grid-row: 2; }
+      .bento-item:nth-child(4) { grid-column: 7 / 13; grid-row: 2; }
+      .bento-item:nth-child(5) { grid-column: 1 / 7; grid-row: 3; }
+      .bento-item:nth-child(6) { grid-column: 7 / 13; grid-row: 3; }
+      .depo-grid { grid-template-columns: 1fr; }
+      nav { padding: 1.2rem 5vw; }
+      .nav-links { display: none; }
+      .promo-left { padding: 4.5rem 2rem; }
+      .promo-title { font-size: clamp(3rem, 11vw, 4.8rem); }
+      .promo-desc { font-size: 1rem; }
+      .promo-right { min-height: 420px; }
+
+      /* ─── MARQUEE MOBILE ANIMADO NATURAL ─── */
+      .marquee-strip {
+        padding: 0.9rem 0;
+        overflow: hidden;
+      }
+
+      .marquee-track {
+        display: flex;
+        width: max-content;
+        will-change: transform;
+        animation: marqueeScroll var(--marquee-duration, 34s) linear infinite;
+      }
+
+      .marquee-group {
+        display: flex;
+        align-items: center;
+        gap: 3.4rem;
+        padding-right: 3.4rem;
+        white-space: nowrap;
+        flex-shrink: 0;
+        min-width: max-content;
+      }
+
+      .marquee-item {
+        padding: 0;
+        gap: 1.1rem;
+        font-size: 0.56rem;
+        letter-spacing: 0.16em;
+        line-height: 1;
+        white-space: nowrap;
+        flex-shrink: 0;
+      }
+
+      .marquee-dot {
+        width: 4px;
+        height: 4px;
+        flex: 0 0 4px;
+      }
+    }
+
+    /* ─── AJUSTES RESPONSIVOS PRISS FERNANDES ─── */
+    img { max-width: 100%; display: block; }
+    html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
+    section, div, nav, footer { max-width: 100%; }
+
+    .bento-item:nth-child(6) img {
+      object-position: center center;
+    }
+
+    @media (pointer: coarse), (max-width: 900px) {
+      body, a, button, [role="button"], input, label, select, textarea { cursor: auto; }
+      #cursor, #cursor-ring { display: none !important; }
+    }
+
+    @media (max-width: 900px) {
+      nav {
+        position: sticky;
+        top: 0;
+        min-height: 72px;
+        padding: 0.9rem 4.5vw;
+        background: rgba(250,247,242,0.94);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        border-bottom: 1px solid rgba(201,169,110,0.14);
+      }
+
+      nav.scrolled { padding: 0.85rem 4.5vw; }
+
+      .nav-logo { gap: 0.7rem; min-width: 0; }
+      .nav-logo-mark { width: 34px; height: 34px; flex: 0 0 34px; }
+      .nav-logo-text {
+        font-size: clamp(0.95rem, 4vw, 1.15rem);
+        letter-spacing: 0.12em;
+        white-space: nowrap;
+      }
+      .nav-ig { gap: 0.35rem; font-size: 0.58rem; letter-spacing: 0.18em; }
+      .nav-ig svg { width: 17px; height: 17px; flex: 0 0 auto; }
+
+      .hero {
+        min-height: auto;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+      .hero-left {
+        order: 2;
+        padding: 3.2rem 6vw 4rem;
+        justify-content: flex-start;
+      }
+      .hero-right {
+        order: 1;
+        height: min(78vh, 620px);
+        min-height: 430px;
+      }
+      .hero-title {
+        font-size: clamp(3rem, 14vw, 5.1rem);
+        line-height: 0.98;
+        margin-bottom: 1.4rem;
+      }
+      .hero-subtitle {
+        max-width: 100%;
+        font-size: 0.92rem;
+        line-height: 1.85;
+        margin-bottom: 2rem;
+      }
+      .hero-actions {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.2rem;
+      }
+      .hero-scroll-hint { display: none; }
+      .hero-counter {
+        right: 1.2rem;
+        bottom: 1rem;
+        font-size: 4rem;
+      }
+      .hero-image-overlay {
+        background: linear-gradient(to top, var(--warm-white) 0%, transparent 22%);
+      }
+
+      .sobre { min-height: auto; }
+      .sobre-image {
+        height: auto;
+        min-height: 0;
+      }
+      .sobre-image img {
+        height: auto;
+        min-height: 0;
+        object-fit: contain;
+      }
+      .sobre-image-badge {
+        bottom: 1.2rem;
+        right: 0;
+        padding: 1rem 1.4rem;
+      }
+      .sobre-content { padding: 4rem 6vw; }
+      .section-title { font-size: clamp(2.35rem, 10vw, 3.5rem); }
+      .section-body {
+        max-width: none;
+        font-size: 0.95rem;
+        line-height: 1.9;
+      }
+      .sobre-stats {
+        gap: 1.4rem;
+        flex-wrap: wrap;
+      }
+      .stat-item { min-width: 90px; }
+      .stat-num { font-size: 2.2rem; }
+
+      .curadoria {
+        padding: 4.6rem 5vw 2.8rem;
+      }
+      .curadoria-header {
+        display: block;
+        margin-bottom: 2.4rem;
+      }
+      .curadoria-header-right {
+        text-align: left;
+        margin-top: 1rem;
+      }
+
+      .bento-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.9rem;
+      }
+      .bento-item,
+      .bento-item:nth-child(1),
+      .bento-item:nth-child(2),
+      .bento-item:nth-child(3),
+      .bento-item:nth-child(4),
+      .bento-item:nth-child(5),
+      .bento-item:nth-child(6) {
+        grid-column: auto !important;
+        grid-row: auto !important;
+        aspect-ratio: 4 / 5;
+        min-height: 0;
+      }
+      .bento-item:nth-child(1) {
+        grid-column: 1 / -1 !important;
+        aspect-ratio: 1.05 / 1;
+      }
+      .bento-item:nth-child(6) {
+        grid-column: 1 / -1 !important;
+        aspect-ratio: 16 / 9;
+        background: #22201f;
+      }
+      .bento-item img {
+        width: 100%;
+        height: 100%;
+        min-height: 0;
+        object-fit: cover;
+      }
+      .bento-item:nth-child(6) img {
+        object-fit: contain;
+        object-position: center center;
+        background: #22201f;
+      }
+      .bento-overlay {
+        opacity: 1;
+        background: linear-gradient(to top, rgba(30,22,18,0.62) 0%, rgba(30,22,18,0.12) 45%, transparent 72%);
+      }
+      .bento-info {
+        padding: 1.15rem 1rem;
+        transform: none;
+      }
+      .bento-tag {
+        font-size: 0.48rem;
+        letter-spacing: 0.24em;
+      }
+      .bento-name {
+        font-size: clamp(1.08rem, 5vw, 1.45rem);
+        line-height: 1.18;
+      }
+
+      .filosofia { padding: 5rem 5vw; }
+
+      .depoimentos { padding: 5rem 5vw; }
+      .depo-header { margin-bottom: 3rem; }
+      .depo-card { padding: 2rem 1.5rem; }
+
+      .promo-buritis { min-height: auto; }
+      .promo-left { padding: 4.5rem 6vw; }
+      .promo-title { font-size: clamp(3rem, 14vw, 4.6rem); }
+      .promo-right {
+        min-height: 0;
+        height: auto;
+      }
+      .promo-right img {
+        height: auto;
+        object-fit: contain;
+      }
+
+      footer {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .nav-logo-text { font-size: 0.98rem; letter-spacing: 0.1em; }
+      .nav-ig span { display: inline; }
+      .nav-ig svg { width: 21px; height: 21px; }
+      .hero-right {
+        height: 64vh;
+        min-height: 360px;
+      }
+      .hero-left { padding: 2.8rem 6vw 3.6rem; }
+      .btn-primary { width: 100%; justify-content: center; padding: 1rem 1.2rem; }
+      .bento-grid { gap: 0.75rem; }
+      .bento-info { padding: 1rem 0.8rem; }
+      .bento-tag { font-size: 0.43rem; letter-spacing: 0.2em; }
+      .bento-name { font-size: 1.08rem; }
+      .bento-item:nth-child(6) { aspect-ratio: 4 / 3; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Custom Cursor -->
+  <div id="cursor"></div>
+  <div id="cursor-ring"></div>
+
+  <!-- ── NAV ── -->
+  <nav id="main-nav">
+    <a href="https://www.instagram.com/prissfernandescuradoria/" target="_blank" class="nav-ig nav-ig-center">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4.5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+      <span>Instagram</span>
+    </a>
+  </nav>
+
+  <!-- ── HERO ── -->
+  <section class="hero">
+    <div class="hero-left">
+      <div class="hero-eyebrow">
+        <div class="hero-eyebrow-line"></div>
+        <span>Curadoria de Semijoias</span>
+      </div>
+      <h1 class="hero-title">
+        Semijoias essenciais<br>
+        para os seus<br>
+        <em>dias</em>
+      </h1>
+      <p class="hero-subtitle">
+        Elegância discreta, qualidade impecável e atemporalidade em cada detalhe. Semijoias selecionadas com intenção, para quem valoriza beleza e significado.
+      </p>
+      <div class="hero-actions">
+        <a href="#curadoria" class="btn-primary">Fotos</a>
+        <a href="#sobre" class="btn-ghost"><span></span></a>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-image-wrap">
+        <img src="img/cabecalho.png" alt="Priss Fernandes Curadoria">
+        <div class="hero-image-overlay"></div>
+      </div>
+      <div class="hero-counter">01</div>
+    </div>
+    <div class="hero-scroll-hint">
+      <div class="scroll-line"></div>
+      <span class="scroll-text">Scroll</span>
+    </div>
+  </section>
+
+  <!-- ── MARQUEE ── -->
+  <div class="marquee-strip">
+    <div class="marquee-track" id="marquee-track">
+      <div class="marquee-group" id="marquee-group">
+        <span class="marquee-item">Banho de Ouro 18k <span class="marquee-dot"></span></span>
+        <span class="marquee-item">Pérola Barroca <span class="marquee-dot"></span></span>
+        <span class="marquee-item">Banho de Ródio <span class="marquee-dot"></span></span>
+        <span class="marquee-item">Cristais <span class="marquee-dot"></span></span>
+        <span class="marquee-item">Zircônia <span class="marquee-dot"></span></span>
+      </div>
+      <div class="marquee-group" aria-hidden="true">
+        <span class="marquee-item">Banho de Ouro 18k <span class="marquee-dot"></span></span>
+        <span class="marquee-item">Pérola Barroca <span class="marquee-dot"></span></span>
+        <span class="marquee-item">Banho de Ródio <span class="marquee-dot"></span></span>
+        <span class="marquee-item">Cristais <span class="marquee-dot"></span></span>
+        <span class="marquee-item">Zircônia <span class="marquee-dot"></span></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SOBRE ── -->
+  <section id="sobre" class="sobre">
+    <div class="sobre-image reveal-left">
+      <img src="img/aboutus.png" alt="Sobre Priss Fernandes">
+      <div class="sobre-image-badge">Est. 2019</div>
+    </div>
+    <div class="sobre-content">
+      <div class="section-label reveal" data-delay="1">
+        <div class="section-label-line"></div>
+        <span></span>
+      </div>
+      <h2 class="section-title reveal" data-delay="2">
+        Semijoias com alma<br>
+        Escolhidas com <em>intenção</em>
+      </h2>
+      <p class="section-body reveal" data-delay="3">
+        Cada peça da nossa curadoria é selecionada pensando em durabilidade, conforto e uma beleza que transcende tendências.
+      <p class="section-body reveal" data-delay="4">
+        Aqui, cada semijoia é mais do que um acessório — é uma escolha consciente de quem você é.
+      </p>
+      <div class="sobre-stats reveal" data-delay="5">
+        <div class="stat-item">
+          <span class="stat-num">∞</span>
+          <span class="stat-label">Essencial</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num">∞</span>
+          <span class="stat-label">Clássica</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num">∞</span>
+          <span class="stat-label">Atemporal</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CURADORIA ── -->
+  <section id="curadoria" class="curadoria">
+    <div class="curadoria-header">
+      <div class="curadoria-header-left">
+        <div class="section-label reveal">
+          <div class="section-label-line"></div>
+          <span>Destaques</span>
+        </div>
+        <h2 class="section-title reveal" data-delay="2">Curadoria da<br><em>temporada</em></h2>
+      </div>
+      <div class="curadoria-header-right reveal" data-delay="3">
+        Minimalismo sofisticado<br>em cada detalhe
+      </div>
+    </div>
+
+    <div class="bento-grid">
+      <div class="bento-item reveal-scale" data-delay="1">
+        <img src="img/brilho-branco.png" alt="Cristais Minimalistas">
+        <div class="bento-overlay"></div>
+        <div class="bento-info">
+          <span class="bento-tag">Cristais</span>
+          <div class="bento-name">Delicadeza que ilumina</div>
+        </div>
+      </div>
+
+      <div class="bento-item reveal-scale" data-delay="2">
+        <img src="img/pedra-onix.png" alt="Pedra Ônix">
+        <div class="bento-overlay"></div>
+        <div class="bento-info">
+          <span class="bento-tag">Brinco</span>
+          <div class="bento-name">Delicadeza e Charme </div>
+        </div>
+      </div>
+
+      <div class="bento-item reveal-scale" data-delay="2">
+        
+        <img src="img/anel.png" alt="Anel de Esmeralda">
+        <div class="bento-overlay"></div>
+        <div class="bento-info">
+          <span class="bento-tag">Anel</span>
+          <div class="bento-name">Equilíbrio e harmonia</div>
+        </div>
+        </a>
+      </div>
+
+      <div class="bento-item reveal-scale" data-delay="3">
+        
+        <img src="img/perola.png" alt="Pérola Barroca">
+        <div class="bento-overlay"></div>
+        <div class="bento-info">
+          <span class="bento-tag">Pingente</span>
+          <div class="bento-name">Pureza e Elegância</div>
+        </div>
+        </a>
+      </div>
+
+      <div class="bento-item reveal-scale" data-delay="3">
+        
+        <img src="img/conjunto.png" alt="Conjunto">
+        <div class="bento-overlay"></div>
+        <div class="bento-info">
+          <span class="bento-tag">Aneis Ajustáveis</span>
+          <div class="bento-name">Sofisticação e Funcionalidade</div>
+        </div>
+        </a>
+      </div>
+
+      <div class="bento-item reveal-scale" data-delay="4">
+        
+        <img src="img/pulso.png" alt="Nova coleção">
+        <div class="bento-overlay"></div>
+        <div class="bento-info">
+          <span class="bento-tag">Bracelete</span>
+          <div class="bento-name">Poderoso e Protagonista</div>
+        </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FILOSOFIA ── -->
+  <section class="filosofia">
+    <div class="filosofia-inner">
+      <blockquote class="filosofia-quote reveal">
+        "Curadoria feita com<br>
+        afeto, <em>especialmente</em> pra você."
+      </blockquote>
+      <div class="filosofia-divider reveal"></div>
+      <p class="filosofia-attr reveal" data-delay="2">Priss Fernandes</p>
+
+    </div>
+  </section>
+
+  <!-- ── DEPOIMENTOS ── -->
+  <section class="depoimentos">
+    <div class="depo-header">
+      <div class="section-label reveal" style="justify-content: center;">
+        <div class="section-label-line"></div>
+        <span>Quem usa, aprova</span>
+        <div class="section-label-line"></div>
+      </div>
+      <h2 class="section-title reveal" data-delay="2" style="margin-top: 1rem;">O que dizem<br><em>nossas clientes.</em></h2>
+    </div>
+    <div class="depo-grid">
+      <div class="depo-card reveal" data-delay="1">
+        <div class="depo-stars">
+          <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+        </div>
+        <p class="depo-text">Já sou cliente da Priss há algum tempo e sempre me surpreende a qualidade das peças. São peças para ter a vida toda. Além do atendimento impecável, a curadoria da Priss, parece captar a nossa essência e indicar peças  que de fato nos representam. Nem penso em semi joias, sem antes acompanhar as novidades da minha curadora preferida!</p>
+        <div class="depo-author">
+          <div class="depo-avatar">C</div>
+          <div>
+            <div class="depo-name">Camila Batista</div>
+            <div class="depo-handle">@camila_bn</div>
+          </div>
+        </div>
+      </div>
+      <div class="depo-card reveal" data-delay="2">
+        <div class="depo-stars">
+          <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+        </div>
+        <p class="depo-text">Adoro as peças da Priss. Basta mudar o look e tenho várias peças em uma só. Qualidade e beleza são sua marca registrada. Parabéns!!!</p>
+        <div class="depo-author">
+          <div class="depo-avatar">K</div>
+          <div>
+            <div class="depo-name">Kênia Borges</div>
+            <div class="depo-handle">@keninhanl</div>
+          </div>
+        </div>
+      </div>
+      <div class="depo-card reveal" data-delay="3">
+        <div class="depo-stars">
+          <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+        </div>
+        <p class="depo-text">Tenho peças pra cada dia da semana. Impressionante como cada uma me representa tão bem. Priss, você é sucesso e parabéns pela dedicação e carinho em cada atendimento. Serei cliente até o fim.</p>
+        <div class="depo-author">
+          <div class="depo-avatar">L</div>
+          <div>
+            <div class="depo-name">Lívia Pinto</div>
+            <div class="depo-handle">@liviaago</div>
+          </div>
+        </div>
+      </div>
+      <!-- NOVO DEPOIMENTO — edite o texto, nome, inicial e @usuario -->
+      <div class="depo-card reveal" data-delay="4">
+        <div class="depo-stars">
+          <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+        </div>
+        <p class="depo-text">A experiência de vivenciar a sua melhor versão com toda atenção ao seu estilo, todo carinho direcionado as melhores semi joias. Indico para todas as mulheres a Priss Fernandes! Eu amo!!!</p>
+        <div class="depo-author">
+          <div class="depo-avatar">C</div>
+          <div>
+            <div class="depo-name">Cibely Émily</div>
+            <div class="depo-handle">@cibelyemily</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CONTATO / PROMO BURITIS ── -->
+  <section id="contato" class="promo-buritis">
+    <div class="promo-left">
+      <div class="promo-content reveal-left">
+        <div class="promo-label">Condição especial</div>
+        <div class="promo-line"></div>
+        <h2 class="promo-title">
+          Frete grátis<br>
+          bairro <em>Buritis - BH</em>
+        </h2>
+        <p class="promo-desc">
+        </p>
+        <div class="promo-cta-row">
+          <a href="https://wa.me/31994522324" target="_blank" class="promo-cta">Fale conosco <span></span></a>
+        </div>
+      </div>
+    </div>
+    <div class="promo-right reveal-right">
+      <img src="img/rodape.png" alt="Promoção Buritis" class="promo-image">
+    </div>
+  </section>
+
+  <!-- ── FOOTER ── -->
+  <footer>
+    <span class="footer-logo">Priss Fernandes</span>
+    <span class="footer-copy">© 2026 · Curadoria de Semijoias</span>
+    <a href="https://www.instagram.com/prissfernandescuradoria/" target="_blank" class="footer-ig">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4.5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+    </a>
+  </footer>
+
+  <script>
+    // ── Cursor personalizado ──
+    const cursor = document.getElementById('cursor');
+    const ring = document.getElementById('cursor-ring');
+    let mx = 0, my = 0, rx = 0, ry = 0;
+
+    document.addEventListener('mousemove', e => {
+      mx = e.clientX;
+      my = e.clientY;
+    });
+
+    function animCursor() {
+      cursor.style.left = mx + 'px';
+      cursor.style.top = my + 'px';
+      rx += (mx - rx) * 0.14;
+      ry += (my - ry) * 0.14;
+      ring.style.left = rx + 'px';
+      ring.style.top = ry + 'px';
+      requestAnimationFrame(animCursor);
+    }
+    animCursor();
+
+    // ── Nav ao scroll ──
+    const nav = document.getElementById('main-nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 60);
+    });
+
+    // ── Reveal on scroll ──
+    const reveals = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('revealed');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    reveals.forEach(el => observer.observe(el));
+
+    // ── Parallax leve no hero ──
+    window.addEventListener('scroll', () => {
+      const heroImg = document.querySelector('.hero-image-wrap img');
+      if (heroImg) {
+        heroImg.style.transform = `scale(1) translateY(${window.scrollY * 0.12}px)`;
+      }
+    });
+
+    // ── Letreiro contínuo sem "teleporte" ──
+    const mobileMarqueeLabels = ['OURO 18K', 'PÉROLAS', 'RÓDIO', 'CRISTAIS', 'ZIRCÔNIAS'];
+    const desktopMarqueeLabels = ['Banho de Ouro 18k', 'Pérola Barroca', 'Banho de Ródio', 'Cristais', 'Zircônia'];
+
+    function ajustarTextosLetreiro() {
+      const isMobile = window.matchMedia('(max-width: 900px)').matches;
+      const labels = isMobile ? mobileMarqueeLabels : desktopMarqueeLabels;
+
+      document.querySelectorAll('.marquee-group').forEach(group => {
+        group.querySelectorAll('.marquee-item').forEach((item, index) => {
+          let dot = item.querySelector('.marquee-dot');
+          if (!dot) {
+            dot = document.createElement('span');
+            dot.className = 'marquee-dot';
+          }
+
+          item.textContent = labels[index % labels.length] + ' ';
+          item.appendChild(dot);
+        });
+      });
+    }
+
+    function montarLetreiroContinuo() {
+      const track = document.getElementById('marquee-track');
+      const original = document.getElementById('marquee-group');
+
+      if (!track || !original) return;
+
+      ajustarTextosLetreiro();
+
+      track.querySelectorAll('.marquee-group.clone').forEach(clone => clone.remove());
+
+      const gruposExtrasAntigos = [...track.querySelectorAll('.marquee-group:not(#marquee-group):not(.clone)')];
+      gruposExtrasAntigos.forEach(group => group.remove());
+
+      const larguraGrupo = original.scrollWidth;
+      const larguraTela = track.parentElement.offsetWidth;
+      const totalClones = Math.ceil((larguraTela * 2.5) / larguraGrupo) + 3;
+
+      for (let i = 0; i < totalClones; i++) {
+        const clone = original.cloneNode(true);
+        clone.removeAttribute('id');
+        clone.classList.add('clone');
+        clone.setAttribute('aria-hidden', 'true');
+        track.appendChild(clone);
+      }
+
+      track.style.setProperty('--marquee-width', `${larguraGrupo}px`);
+      track.style.setProperty('--marquee-duration', window.matchMedia('(max-width: 900px)').matches ? '34s' : '28s');
+    }
+
+    window.addEventListener('load', montarLetreiroContinuo);
+    window.addEventListener('resize', montarLetreiroContinuo);
+
+  </script>
+</body>
+</html>
